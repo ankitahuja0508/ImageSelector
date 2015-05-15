@@ -420,6 +420,7 @@ int id alertTitle 0x7f0b0030
 int id always 0x7f0b0016
 int id beginning 0x7f0b0013
 int id btn_crop 0x7f0b0051
+int id btn_save 0x7f0b0053
 int id buttonPanel 0x7f0b0036
 int id checkbox 0x7f0b0038
 int id collapseActionView 0x7f0b0017

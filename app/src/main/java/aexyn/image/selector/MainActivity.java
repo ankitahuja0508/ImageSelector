@@ -2,8 +2,10 @@ package aexyn.image.selector;
 
 import java.io.File;
 
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -16,6 +18,7 @@ import android.content.pm.ResolveInfo;
 
 import android.graphics.Bitmap;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 
 import android.net.Uri;
@@ -36,7 +39,7 @@ public class MainActivity extends Activity {
 	private static final int CROP_FROM_CAMERA = 2;
 	private static final int PICK_FROM_FILE = 3;
 
-
+    Bitmap photo;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +93,16 @@ public class MainActivity extends Activity {
 				dialog.show();
 			}
 		});
+
+
+        Button btnSave = (Button) findViewById(R.id.btn_save);
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveImg();
+            }
+        });
     }
     
     @Override
@@ -113,7 +126,7 @@ public class MainActivity extends Activity {
 		        Bundle extras = data.getExtras();
 	
 		        if (extras != null) {	        	
-		            Bitmap photo = extras.getParcelable("data");
+		            photo = extras.getParcelable("data");
 		            
 		            mImageView.setImageBitmap(photo);
 		        }
@@ -127,7 +140,32 @@ public class MainActivity extends Activity {
 
 	    }
 	}
-    
+
+    private void saveImg(){
+
+        String root = Environment.getExternalStorageDirectory().toString();
+        File newDir = new File(root + "/Image Selector Sample");
+        newDir.mkdirs();
+        Random gen = new Random();
+        int n = 10000;
+        n = gen.nextInt(n);
+        String fotoname = "Photo-"+ n +".jpg";
+        File file = new File (newDir, fotoname);
+        if (file.exists ()) file.delete ();
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            photo.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            out.close();
+            Toast.makeText(getApplicationContext(), "Saved to your folder", Toast.LENGTH_SHORT ).show();
+
+        } catch (Exception e) {
+            Log.e("Error", e.toString());
+            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT ).show();
+        }
+
+    }
+
     private void doCrop() {
 		final ArrayList<CropOption> cropOptions = new ArrayList<CropOption>();
     	
@@ -146,10 +184,10 @@ public class MainActivity extends Activity {
         	intent.setData(mImageCaptureUri);
             
             intent.putExtra("outputX", 200);
-            intent.putExtra("outputY", 200);
+            intent.putExtra("outputY", 300);
             intent.putExtra("aspectX", 1);
             intent.putExtra("aspectY", 1);
-            intent.putExtra("scale", true);
+            //intent.putExtra("scale", true);
             intent.putExtra("return-data", true);
             
         	if (size == 1) {

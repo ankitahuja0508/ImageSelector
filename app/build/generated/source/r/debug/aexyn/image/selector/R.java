@@ -1527,6 +1527,7 @@ containing a value of this type.
         public static final int always=0x7f0b0016;
         public static final int beginning=0x7f0b0013;
         public static final int btn_crop=0x7f0b0051;
+        public static final int btn_save=0x7f0b0053;
         public static final int buttonPanel=0x7f0b0036;
         public static final int checkbox=0x7f0b0038;
         public static final int collapseActionView=0x7f0b0017;
